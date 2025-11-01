@@ -6,6 +6,8 @@ import json
 from datetime import datetime
 import plotly.graph_objects as go
 import plotly.express as px
+import os # Import os to check for file
+from pathlib import Path # Import Path for file operations
 
 # Page configuration
 st.set_page_config(
@@ -18,18 +20,64 @@ st.set_page_config(
 # Custom CSS for better styling
 st.markdown("""
 <style>
+    /* Import modern font */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #121212; /* CHANGED: Dark background */
+        color: #e0e0e0; /* CHANGED: Light text for body */
+    }
+
+    /* --- Sidebar Style --- */
+    [data-testid="stSidebar"] {
+        background-color: #1e1e1e; /* CHANGED: Dark sidebar */
+        border-right: 1px solid #333;
+    }
+    
+    /* --- 
+    FIX: Force all text inside the sidebar to be light-colored 
+    to solve the readability issue from the screenshot.
+    --- */
+    [data-testid="stSidebar"] * {
+        color: #e0e0e0 !important; 
+    }
+    /* --- END OF FIX --- */
+
+    /* --- Main Header --- */
     .main-header {
-        font-size: 3rem;
-        color: #1f77b4;
+        font-size: 3.5rem; /* Slightly larger */
+        font-weight: 700;
         text-align: center;
+        margin-bottom: 1rem;
+        /* Red Gradient Text */
+        background: linear-gradient(135deg, #c0392b 0%, #922b21 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        padding-bottom: 10px;
+    }
+    
+    /* Sub-header */
+    h3 {
+        text-align: center;
+        color: #aaa; /* CHANGED: Light gray for sub-headers */
+        font-weight: 300;
         margin-bottom: 2rem;
     }
+    
+    /* Make all headers white */
+    h1, h2, h3, h4, h5, h6 {
+        color: #ffffff;
+    }
+    
+    /* --- Notification Boxes --- */
     .success-box {
         padding: 20px;
         border-radius: 10px;
         background-color: #d4edda;
         border: 1px solid #c3e6cb;
         margin: 10px 0;
+        color: #155724; /* Dark text for light box */
     }
     .error-box {
         padding: 20px;
@@ -37,20 +85,98 @@ st.markdown("""
         background-color: #f8d7da;
         border: 1px solid #f5c6cb;
         margin: 10px 0;
+        color: #721c24; /* Dark text for light box */
     }
-    .info-box {
-        padding: 20px;
-        border-radius: 10px;
-        background-color: #d1ecf1;
-        border: 1px solid #bee5eb;
-        margin: 10px 0;
-    }
+
+    /* --- Feature Cards (Home Page) --- */
     .feature-card {
-        padding: 15px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 25px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #c0392b 0%, #922b21 100%);
         color: white;
         margin: 10px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    .feature-card h3 {
+        text-align: left;
+        color: white;
+        font-weight: 700;
+    }
+
+    /* --- Modern Card Styling for Forms/Expanders --- */
+    [data-testid="stForm"], [data-testid="stExpander"] {
+        background-color: #1e1e1e; /* CHANGED: Dark card background */
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border: 1px solid #333; /* CHANGED: Darker border */
+    }
+    
+    /* --- Themed Buttons --- */
+    [data-testid="stButton"] button {
+        background-color: #c0392b;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 700;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    [data-testid="stButton"] button:hover {
+        background-color: #922b21;
+        transform: translateY(-2px);
+    }
+    [data-testid="stFormSubmitButton"] button {
+        width: 100%;
+        font-size: 1.1rem;
+        padding: 12px;
+    }
+    [data-testid="stDownloadButton"] button {
+        background-color: #27ae60;
+    }
+    [data-testid="stDownloadButton"] button:hover {
+        background-color: #219150;
+    }
+
+    /* --- Documentation Dark Mode (Already correct) --- */
+    .documentation-output {
+        padding: 25px;
+        border-radius: 10px;
+        background-color: #1e1e1e; /* Dark background */
+        border: 1px solid #444;    /* Darker border */
+        color: #e0e0e0;           /* Light text */
+        margin-top: 20px;
+    }
+    .documentation-output h1,
+    .documentation-output h2,
+    .documentation-output h3,
+    .documentation-output h4 {
+        color: #ffffff; /* Pure white for headers */
+        border-bottom: 1px solid #555;
+        padding-bottom: 5px;
+    }
+    .documentation-output code {
+        background-color: #333; /* Darker code background */
+        color: #f1f1f1;       /* Light code text */
+        border-radius: 4px;
+        padding: 2px 5px;
+    }
+    .documentation-output pre {
+        background-color: #2b2b2b;
+        color: #f1f1f1;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+    
+    /* --- Footer --- */
+    footer {
+        color: #888;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -59,12 +185,14 @@ st.markdown("""
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.markdown('<h1 class="main-header">🚀 Codebase Genius</h1>', unsafe_allow_html=True)
-    st.markdown("### AI-Powered Documentation Generator")
+    st.markdown("<h3>AI-Powered Documentation Generator</h3>", unsafe_allow_html=True)
     st.markdown("---")
 
 # Sidebar
 with st.sidebar:
-    st.image("https://cdn-icons-png.flaticon.com/512/2103/2103633.png", width=100)
+    # --- THIS IS THE NEW ICON ---
+    st.image("https://img.icons8.com/fluency/96/brain.png", width=100)
+    # --- END OF CHANGE ---
     st.title("Navigation")
     
     menu = st.radio("Choose Action", [
@@ -158,7 +286,7 @@ elif menu == "📚 Generate Docs":
             
             # Make API call
             response = requests.post(
-                "http://localhost:8000/generate",
+                "http://localhost:8000/generate", # Make sure this matches your server.py port
                 json={"github_url": github_url, "use_llm": use_llm}
             )
             
@@ -176,18 +304,48 @@ elif menu == "📚 Generate Docs":
                 </div>
                 """, unsafe_allow_html=True)
                 
+                # --- THIS IS THE FIX ---
+                # Load and display the documentation
+                doc_path_str = result.get('output_path')
+                doc_path = None # Initialize doc_path
+                
+                if doc_path_str:
+                    # The server sends the *directory*, but we need the *file* inside it.
+                    # Based on documentation_pipeline.py, the file is 'comprehensive_documentation.md'
+                    output_dir_path = Path(doc_path_str)
+                    doc_path = output_dir_path / "comprehensive_documentation.md" # This is the full file path
+                    
+                    if doc_path.exists():
+                        st.markdown("---")
+                        st.markdown("## 📄 Generated Documentation")
+                        
+                        try:
+                            doc_content = doc_path.read_text(encoding="utf-8")
+                            # Display in a styled container
+                            st.markdown(f'<div class="documentation-output">{doc_content}</div>', unsafe_allow_html=True)
+                        except Exception as e:
+                            st.error(f"Error reading documentation file: {e}")
+                    else:
+                        st.error(f"Could not find documentation file at: {doc_path.resolve()}")
+                        st.info("Please check the `output_path` in your server's response and the expected filename.")
+                
+                # --- END OF FIX ---
+
                 # Action buttons
-                col1, col2, col3 = st.columns(3)
+                col1, col2 = st.columns(2)
                 with col1:
-                    if st.button("📖 View Documentation", use_container_width=True):
-                        st.switch_page("View Documentation")  # You'd need to implement this page
+                    # Implement download functionality (NOW USES THE FIXED doc_path)
+                    if doc_path and doc_path.exists(): # Use the new doc_path variable
+                        with open(doc_path, "r", encoding="utf-8") as f:
+                            st.download_button(
+                                label="📥 Download .md",
+                                data=f.read(),
+                                file_name=f"{result.get('repo_name', 'docs')}.md",
+                                mime="text/markdown",
+                                use_container_width=True
+                            )
                 
                 with col2:
-                    if st.button("📥 Download", use_container_width=True):
-                        # Implement download functionality
-                        pass
-                
-                with col3:
                     if st.button("🔄 Generate Another", use_container_width=True):
                         st.rerun()
                         
@@ -195,15 +353,17 @@ elif menu == "📚 Generate Docs":
                 st.markdown(f"""
                 <div class="error-box">
                     <h3>❌ Error Generating Documentation</h3>
-                    <p>{response.text}</p>
+                    <p><strong>Status Code:</strong> {response.status_code}</p>
+                    <pre>{response.text}</pre>
                 </div>
                 """, unsafe_allow_html=True)
                 
         except Exception as e:
             st.markdown(f"""
-            <div class="error-box">
+            <div class.error-box">
                 <h3>❌ Connection Error</h3>
-                <p>Could not connect to the server: {str(e)}</p>
+                <p>Could not connect to the server at http://localhost:8000. Is it running?</p>
+                <p><strong>Error:</strong> {str(e)}</p>
             </div>
             """, unsafe_allow_html=True)
 
@@ -277,7 +437,7 @@ elif menu == "🔄 Recent Projects":
 
 # Settings Page
 elif menu == "⚙️ Settings":
-    st.markdown("## ⚙️ Settings")
+    st.markdown("## S️ Settings")
     
     with st.form("settings_form"):
         st.markdown("### API Configuration")
@@ -298,8 +458,13 @@ elif menu == "⚙️ Settings":
 # Footer
 st.markdown("---")
 st.markdown(
-    "<div style='text-align: center; color: #666;'>"
+    "<div style='text-align: center; color: #888;'>"
     "Made with ❤️ using Streamlit | Codebase Genius v2.0"
     "</div>", 
     unsafe_allow_html=True
 )
+
+
+
+
+
