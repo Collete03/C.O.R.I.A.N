@@ -1,0 +1,14 @@
+{
+  "generation_date": "2025-11-01T14:06:27.000395",
+  "status": "Success",
+  "repository_path": "./repos/C.O.R.I.A.N",
+  "output_directory": "C.O.R.I.A.N_documentation_C.O.R.I.A.N",
+  "files_generated": [
+    "C.O.R.I.A.N_documentation_C.O.R.I.A.N/comprehensive_documentation.md",
+    "C.O.R.I.A.N_documentation_C.O.R.I.A.N/comprehensive_documentation.html",
+    "C.O.R.I.A.N_documentation_C.O.R.I.A.N/enhanced_analysis_metadata.json",
+    "C.O.R.I.A.N_documentation_C.O.R.I.A.N/repository_structure.txt",
+    "C.O.R.I.A.N_documentation_C.O.R.I.A.N/README.md",
+    "C.O.R.I.A.N_documentation_C.O.R.I.A.N/git_metadata.json"
+  ]
+}

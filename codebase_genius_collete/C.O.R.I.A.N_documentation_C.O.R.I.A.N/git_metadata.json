@@ -1,0 +1,56 @@
+{
+  "readme": "For the simple_calc.py you run the jac file then it will ask you to run the python file that has LLM and OpenAi so that it can run 5 random numbers.\n",
+  "git_history": "348efeb (HEAD -> main, origin/main, origin/HEAD) Create README.md\ndfcf8bb Add simple_calc.jac and maths_helper.py\nade7d2c Delete guess_game6.jac\nfd0eebb Delete guess_game6.impl.jac\nee5b91b add all code folder contents\n",
+  "recent_commits": [
+    {
+      "hash": "348efeb",
+      "author": "Collete03",
+      "date": "2025-10-06",
+      "message": "Create README.md"
+    },
+    {
+      "hash": "dfcf8bb",
+      "author": "Collete03",
+      "date": "2025-10-05",
+      "message": "Add simple_calc.jac and maths_helper.py"
+    },
+    {
+      "hash": "ade7d2c",
+      "author": "Collete03",
+      "date": "2025-10-05",
+      "message": "Delete guess_game6.jac"
+    },
+    {
+      "hash": "fd0eebb",
+      "author": "Collete03",
+      "date": "2025-10-05",
+      "message": "Delete guess_game6.impl.jac"
+    },
+    {
+      "hash": "ee5b91b",
+      "author": "Collete03",
+      "date": "2025-10-03",
+      "message": "add all code folder contents"
+    }
+  ],
+  "file_statistics": {
+    "guess_game6.jac": 2,
+    "guess_game6.impl.jac": 2,
+    "README.md": 1,
+    "maths_helper.py": 1,
+    "simple_calc.jac": 1,
+    "first.jac": 1,
+    "guess_game.py": 1,
+    "guess_game1.jac": 1,
+    "guess_game2.jac": 1,
+    "guess_game3.impl.jac": 1,
+    "guess_game3.jac": 1,
+    "guess_game4.impl.jac": 1,
+    "guess_game4.jac": 1,
+    "guess_game5.impl.jac": 1,
+    "guess_game5.jac": 1,
+    "mypyfile.py": 1
+  },
+  "branches": "* main\n  remotes/origin/HEAD -> origin/main\n  remotes/origin/main\n",
+  "tags": []
+}

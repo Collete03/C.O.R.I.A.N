@@ -1,0 +1,22 @@
+{
+  "project_name": "C.O.R.I.A.N",
+  "analysis_date": "2025-11-01T13:35:28.328203",
+  "file_count": 42,
+  "structure": {
+    "src": [
+      "main.py",
+      "utils.py"
+    ],
+    "tests": [
+      "test_main.py"
+    ],
+    "docs": [
+      "README.md"
+    ]
+  },
+  "git_integration": {
+    "has_readme": true,
+    "recent_commits_count": 5,
+    "active_files_count": 16
+  }
+}

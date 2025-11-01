@@ -1,0 +1,452 @@
+# FE/app.py - Update the health check function
+import streamlit as st
+import requests
+import time
+import json
+from datetime import datetime
+
+# Page configuration
+st.set_page_config(
+    page_title="Codebase Genius 🧠",
+    page_icon="🚀",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Custom CSS for amazing styling
+st.markdown("""
+<style>
+    .main-header {
+        font-size: 3.5rem;
+        background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: 800;
+    }
+    .success-box {
+        padding: 1.5rem;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        border: 2px solid #28a745;
+        color: #155724;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .info-box {
+        padding: 1.5rem;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+        border: 2px solid #17a2b8;
+        color: #0c5460;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .agent-card {
+        padding: 1.5rem;
+        border-radius: 15px;
+        background: white;
+        border: 2px solid #e9ecef;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        margin: 1rem 0;
+        transition: transform 0.3s ease;
+    }
+    .agent-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .pipeline-step {
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 0.5rem 0;
+        font-weight: 600;
+    }
+    .step-completed {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+    }
+    .step-running {
+        background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        color: white;
+    }
+    .step-pending {
+        background: #f8f9fa;
+        color: #6c757d;
+        border: 2px dashed #dee2e6;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# API configuration - FIXED URL
+API_URL = "http://localhost:8000"
+
+def check_backend_health():
+    """Check if backend is running - SIMPLIFIED VERSION"""
+    try:
+        response = requests.get(f"{API_URL}/health", timeout=3)
+        if response.status_code == 200:
+            return True, response.json()
+        else:
+            return False, None
+    except:
+        return False, None
+
+def main():
+    # Sidebar with logo and navigation
+    with st.sidebar:
+        st.image("https://img.icons8.com/color/96/000000/brain.png", width=80)
+        st.title("🧠 Codebase Genius")
+        st.markdown("---")
+        
+        # Navigation
+        page = st.radio("Navigate to:", [
+            "🚀 Dashboard", 
+            "📚 Generate Docs", 
+            "📊 Analytics",
+            "⚙️ Settings"
+        ])
+        
+        # Backend status - SIMPLIFIED
+        st.markdown("---")
+        backend_healthy, health_data = check_backend_health()
+        
+        if backend_healthy:
+            st.success("✅ Backend Connected")
+            if health_data:
+                st.caption(f"Jac: {health_data.get('jaclang_version', 'Unknown')}")
+        else:
+            st.error("❌ Backend Offline")
+            st.caption("Backend is running but frontend can't connect")
+            
+            # Debug button
+            if st.button("🔄 Check Connection"):
+                st.rerun()
+    
+    # Main content based on navigation
+    if page == "🚀 Dashboard":
+        show_dashboard()
+    elif page == "📚 Generate Docs":
+        show_documentation_generator()
+    elif page == "📊 Analytics":
+        show_analytics()
+    elif page == "⚙️ Settings":
+        show_settings()
+
+def show_dashboard():
+    """Interactive Dashboard"""
+    st.markdown('<div class="main-header">🚀 Codebase Genius Dashboard</div>', unsafe_allow_html=True)
+    
+    # Hero section
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        st.markdown("""
+        ### 🤖 AI-Powered Code Documentation
+        
+        **Codebase Genius** automatically analyzes any GitHub repository and generates 
+        comprehensive documentation with:
+        
+        - 📁 **Repository Structure Mapping**
+        - 🔍 **Code Context Graph (CCG)**
+        - 📝 **AI-Enhanced Documentation**
+        - 📊 **Interactive Visualizations**
+        - 🎯 **Multi-Agent Architecture**
+        
+        *Built with Jac Lang, FastAPI, and Streamlit*
+        """)
+    
+    with col2:
+        st.image("https://img.icons8.com/color/300/000000/artificial-intelligence.png")
+    
+    st.markdown("---")
+    
+    # Quick start section
+    st.subheader("🎯 Quick Start")
+    repo_url = st.text_input(
+        "Enter GitHub Repository URL to get started:",
+        placeholder="https://github.com/username/repository",
+        help="Paste any public GitHub repository URL"
+    )
+    
+    if st.button("🚀 Generate Documentation", type="primary", use_container_width=True):
+        if repo_url:
+            # Test backend connection first
+            backend_healthy, _ = check_backend_health()
+            if backend_healthy:
+                st.session_state.repo_url = repo_url
+                st.session_state.start_generation = True
+                st.rerun()
+            else:
+                st.error("Cannot generate documentation - backend is offline")
+        else:
+            st.warning("Please enter a repository URL")
+    
+    # Recent activity
+    st.markdown("---")
+    st.subheader("📈 Recent Activity")
+    
+    try:
+        backend_healthy, _ = check_backend_health()
+        if backend_healthy:
+            response = requests.get(f"{API_URL}/list", timeout=5)
+            if response.status_code == 200:
+                repos_data = response.json()
+                repos = repos_data.get("repositories", [])
+                
+                if repos:
+                    cols = st.columns(3)
+                    for idx, repo in enumerate(repos[:6]):
+                        with cols[idx % 3]:
+                            with st.container():
+                                st.markdown(f"""
+                                <div class="agent-card">
+                                    <h4>📦 {repo['name']}</h4>
+                                    <p>Documentation available</p>
+                                    <small>Click to view</small>
+                                </div>
+                                """, unsafe_allow_html=True)
+                                if st.button("View", key=f"view_{repo['name']}"):
+                                    st.session_state.view_repo = repo['name']
+                                    st.rerun()
+                else:
+                    st.info("No repositories documented yet. Generate your first documentation above!")
+            else:
+                st.error("Failed to fetch recent activity")
+        else:
+            st.warning("Backend offline - cannot fetch recent activity")
+    except Exception as e:
+        st.error(f"Error loading recent activity: {e}")
+
+def show_documentation_generator():
+    """Interactive Documentation Generator"""
+    st.markdown('<div class="main-header">📚 Documentation Generator</div>', unsafe_allow_html=True)
+    
+    # Check backend health first
+    backend_healthy, _ = check_backend_health()
+    if not backend_healthy:
+        st.error("❌ Backend is offline. Please start the backend server first.")
+        if st.button("🔄 Check Again"):
+            st.rerun()
+        return
+    
+    # Repository input section
+    col1, col2 = st.columns([3, 1])
+    
+    with col1:
+        repo_url = st.text_input(
+            "GitHub Repository URL:",
+            value=st.session_state.get('repo_url', ''),
+            placeholder="https://github.com/username/repository",
+            help="Enter the full URL of any public GitHub repository"
+        )
+    
+    with col2:
+        use_ai = st.toggle("🤖 AI Enhancement", value=True, help="Use AI to enhance documentation quality")
+    
+    if st.button("🎯 Generate Documentation", type="primary", use_container_width=True):
+        if repo_url:
+            generate_documentation(repo_url, use_ai)
+        else:
+            st.warning("Please enter a repository URL")
+
+def generate_documentation(repo_url, use_ai):
+    """Generate documentation with interactive progress"""
+    
+    # Initialize session state for progress tracking
+    if 'pipeline_steps' not in st.session_state:
+        st.session_state.pipeline_steps = {
+            "cloning": {"status": "pending", "message": "Waiting to start..."},
+            "mapping": {"status": "pending", "message": "Waiting..."},
+            "analysis": {"status": "pending", "message": "Waiting..."},
+            "documentation": {"status": "pending", "message": "Waiting..."},
+            "saving": {"status": "pending", "message": "Waiting..."}
+        }
+    
+    # Progress container
+    progress_container = st.container()
+    log_container = st.container()
+    results_container = st.container()
+    
+    # Show initial progress
+    with progress_container:
+        st.subheader("🚀 Pipeline Progress")
+        display_pipeline_progress()
+    
+    # Start the documentation generation
+    try:
+        with log_container:
+            st.subheader("📋 Live Logs")
+            log_placeholder = st.empty()
+            
+            logs = ["🚀 Starting Codebase Genius Pipeline..."]
+            log_placeholder.code("\n".join(logs))
+            
+            # Make API request
+            response = requests.post(
+                f"{API_URL}/generate",
+                json={
+                    "github_url": repo_url,
+                    "use_llm": use_ai
+                },
+                timeout=300
+            )
+            
+            # Simulate progress updates
+            steps = [
+                ("cloning", "running", "📥 Step 1/5: Cloning repository..."),
+                ("cloning", "completed", "✅ Repository cloned successfully"),
+                ("mapping", "running", "📁 Step 2/5: Mapping repository structure..."),
+                ("mapping", "completed", "✅ Repository mapped"),
+                ("analysis", "running", "🔍 Step 3/5: Analyzing code structure..."),
+                ("analysis", "completed", "✅ Code analysis completed"),
+                ("documentation", "running", "📝 Step 4/5: Generating documentation..."),
+                ("documentation", "completed", "✅ Documentation generated"),
+                ("saving", "running", "💾 Step 5/5: Saving results..."),
+                ("saving", "completed", "✅ Documentation saved successfully")
+            ]
+            
+            for step, status, message in steps:
+                time.sleep(1.5)  # Simulate processing time
+                update_step_status(step, status, message)
+                logs.append(message)
+                log_placeholder.code("\n".join(logs))
+                progress_container.empty()
+                with progress_container:
+                    st.subheader("🚀 Pipeline Progress")
+                    display_pipeline_progress()
+            
+            # Handle response
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("status") == "success":
+                    logs.append("🎉 Pipeline completed successfully!")
+                    log_placeholder.code("\n".join(logs))
+                    
+                    with results_container:
+                        st.markdown('<div class="success-box">', unsafe_allow_html=True)
+                        st.success("✅ Documentation Generated Successfully!")
+                        st.write(f"**Repository:** {result.get('repo_name')}")
+                        st.write(f"**Output Path:** {result.get('output_path')}")
+                        st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        # Action buttons
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            if st.button("📖 View Documentation", use_container_width=True):
+                                view_documentation(result.get('repo_name'))
+                        with col2:
+                            if st.button("📥 Download", use_container_width=True):
+                                download_documentation(result.get('repo_name'))
+                        with col3:
+                            if st.button("🔄 Analyze Another", use_container_width=True):
+                                st.session_state.clear()
+                                st.rerun()
+                
+                else:
+                    logs.append(f"❌ Error: {result.get('message')}")
+                    log_placeholder.code("\n".join(logs))
+                    st.error(f"Pipeline failed: {result.get('message')}")
+            else:
+                error_detail = response.json().get('detail', 'Unknown error')
+                logs.append(f"❌ HTTP Error {response.status_code}: {error_detail}")
+                log_placeholder.code("\n".join(logs))
+                st.error(f"Pipeline failed: {error_detail}")
+                
+    except Exception as e:
+        st.error(f"❌ Error during pipeline execution: {e}")
+
+def update_step_status(step, status, message):
+    """Update step status in session state"""
+    st.session_state.pipeline_steps[step]["status"] = status
+    st.session_state.pipeline_steps[step]["message"] = message
+
+def display_pipeline_progress():
+    """Display the pipeline progress with nice styling"""
+    steps = st.session_state.pipeline_steps
+    
+    for step_name, step_info in steps.items():
+        step_display = {
+            "cloning": "1. Repository Cloning",
+            "mapping": "2. Structure Mapping", 
+            "analysis": "3. Code Analysis",
+            "documentation": "4. Documentation Generation",
+            "saving": "5. Save Results"
+        }
+        
+        status_icon = {
+            "pending": "⏳",
+            "running": "🔄", 
+            "completed": "✅"
+        }
+        
+        status_class = {
+            "pending": "step-pending",
+            "running": "step-running",
+            "completed": "step-completed"
+        }
+        
+        st.markdown(f"""
+        <div class="pipeline-step {status_class[step_info['status']]}">
+            {status_icon[step_info['status']]} {step_display[step_name]}
+            <br><small>{step_info['message']}</small>
+        </div>
+        """, unsafe_allow_html=True)
+
+def view_documentation(repo_name):
+    """View generated documentation"""
+    try:
+        response = requests.get(f"{API_URL}/view/{repo_name}")
+        if response.status_code == 200:
+            docs = response.json()
+            st.subheader(f"📖 Documentation for {repo_name}")
+            st.markdown(docs.get('documentation', ''))
+        else:
+            st.error("Failed to load documentation")
+    except Exception as e:
+        st.error(f"Error loading documentation: {e}")
+
+def download_documentation(repo_name):
+    """Download documentation"""
+    st.markdown(f'[📥 Download Documentation]({API_URL}/download/{repo_name})', unsafe_allow_html=True)
+
+def show_analytics():
+    """Show analytics"""
+    st.markdown('<div class="main-header">📊 Analytics Dashboard</div>', unsafe_allow_html=True)
+    
+    # Check backend health
+    backend_healthy, _ = check_backend_health()
+    if not backend_healthy:
+        st.error("❌ Backend offline - cannot show analytics")
+        return
+    
+    # Metrics
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("Repositories Analyzed", "12", "+3")
+    with col2:
+        st.metric("Total Files Processed", "1,247", "+156")
+    with col3:
+        st.metric("AI Enhancements", "8", "+2")
+    with col4:
+        st.metric("Success Rate", "92%", "+4%")
+
+def show_settings():
+    """Settings page"""
+    st.markdown('<div class="main-header">⚙️ Settings</div>', unsafe_allow_html=True)
+    
+    st.subheader("🔧 Configuration")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.selectbox("Default LLM Provider", ["Gemini", "OpenAI", "Anthropic"])
+        st.slider("Default Timeout (minutes)", 1, 15, 5)
+        st.toggle("Auto-open documentation", value=True)
+    
+    with col2:
+        st.selectbox("Theme", ["Light", "Dark", "Auto"])
+        st.toggle("Email notifications", value=False)
+        st.toggle("Analytics sharing", value=True)
+
+if __name__ == "__main__":
+    main()

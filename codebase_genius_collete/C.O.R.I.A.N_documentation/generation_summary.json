@@ -1,0 +1,14 @@
+{
+  "generation_date": "2025-11-01T13:35:28.348574",
+  "status": "Success",
+  "repository_path": "/home/blackheart03/codebase_genius_collete/C.O.R.I.A.N",
+  "output_directory": "C.O.R.I.A.N_documentation",
+  "files_generated": [
+    "C.O.R.I.A.N_documentation/comprehensive_documentation.md",
+    "C.O.R.I.A.N_documentation/comprehensive_documentation.html",
+    "C.O.R.I.A.N_documentation/enhanced_analysis_metadata.json",
+    "C.O.R.I.A.N_documentation/repository_structure.txt",
+    "C.O.R.I.A.N_documentation/README.md",
+    "C.O.R.I.A.N_documentation/git_metadata.json"
+  ]
+}

@@ -1,0 +1,9 @@
+# Ignore outputs from the Codebase Genius app
+codebase_genius_collete/repos/
+codebase_genius_collete/outputs/
+
+# Ignore test/example clones
+codebase_genius_collete/C.O.R.I.A.N/
+
+# Ignore the generated documentation folder
+codebase_genius_collete/C.O.R.I.A.N_documentation/

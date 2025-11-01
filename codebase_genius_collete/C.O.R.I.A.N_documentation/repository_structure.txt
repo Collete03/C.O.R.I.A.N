@@ -1,0 +1,14 @@
+📄 README.md
+📄 first.jac
+📄 guess_game.py
+📄 guess_game1.jac
+📄 guess_game2.jac
+📄 guess_game3.impl.jac
+📄 guess_game3.jac
+📄 guess_game4.impl.jac
+📄 guess_game4.jac
+📄 guess_game5.impl.jac
+📄 guess_game5.jac
+📄 maths_helper.py
+📄 mypyfile.py
+📄 simple_calc.jac
