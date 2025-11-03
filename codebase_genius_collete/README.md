@@ -1,6 +1,6 @@
 C.O.R.I.A.N (Codebase Genius)
 
-Welcome to Codebase Genius, an AI-powered documentation generator. This tool analyzes a target GitHub repository, understands its file structure and code, and produces a comprehensive, multi-format documentation report.
+Welcome to Codebase Genius, an AI-powered documentation generator. This tool analyzes any GitHub repository, understands its file structure and code, and produces a comprehensive, multi-format documentation report.
 
 This project consists of two main parts:
 

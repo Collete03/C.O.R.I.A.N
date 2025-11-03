@@ -1,0 +1,23 @@
+📄 calculator.jac
+📄 calculator.py
+📂 design/
+  📄 design.txt
+📄 example.py
+📄 first.jac
+📄 guess_game.py
+📄 guess_game1.jac
+📄 guess_game2.jac
+📄 guess_game3.impl.jac
+📄 guess_game3.jac
+📄 guess_game4.impl.jac
+📄 guess_game4.jac
+📄 guess_game4.jir
+📄 guess_game5.impl.jac
+📄 guess_game5.jac
+📄 guess_game5.jir
+📄 mypyfile.py
+📄 python
+📄 python_helper.py
+📄 simple
+📄 simple_calculator.jac
+📄 simple_calculator.jir

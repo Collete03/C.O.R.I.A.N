@@ -198,6 +198,7 @@ with st.sidebar:
     menu = st.radio("Choose Action", [
         "🏠 Home", 
         "📚 Generate Docs", 
+        "📝 Multi-Repo Input",  # ← NEW OPTION ADDED
         "📊 Analytics", 
         "🔄 Recent Projects",
         "⚙️ Settings"
@@ -360,12 +361,167 @@ elif menu == "📚 Generate Docs":
                 
         except Exception as e:
             st.markdown(f"""
-            <div class.error-box">
+            <div class="error-box">
                 <h3>❌ Connection Error</h3>
                 <p>Could not connect to the server at http://localhost:8000. Is it running?</p>
                 <p><strong>Error:</strong> {str(e)}</p>
             </div>
             """, unsafe_allow_html=True)
+
+# Multi-Repo Input Page - NEW SECTION
+elif menu == "📝 Multi-Repo Input":
+    st.markdown("## 📝 Multiple Repository Input")
+    
+    st.markdown("""
+    ### Enter Multiple Repositories
+    Add GitHub URLs one per line. Your system will generate documentation for each repository.
+    """)
+    
+    # Text area for multiple repo input
+    repo_text = st.text_area(
+        "🔗 Enter GitHub URLs (one per line):",
+        placeholder="https://github.com/Collete03/C.O.R.I.A.N\nhttps://github.com/facebook/react\nhttps://github.com/tensorflow/tensorflow",
+        height=200,
+        help="Enter one GitHub URL per line. All repositories will be processed."
+    )
+    
+    col1, col2, col3 = st.columns([1, 1, 1])
+    
+    with col1:
+        use_llm = st.toggle("🤖 AI Enhancement", value=True)
+    
+    with col2:
+        process_parallel = st.toggle("⚡ Parallel Processing", value=False)
+    
+    with col3:
+        include_private = st.toggle("🔒 Include Private", value=False)
+    
+    # Process the repositories
+    if st.button("🚀 Generate All Documentation", type="primary", use_container_width=True):
+        if not repo_text.strip():
+            st.error("❌ Please enter at least one repository URL")
+        else:
+            # Parse repositories from text input
+            repos = [repo.strip() for repo in repo_text.split('\n') if repo.strip()]
+            valid_repos = []
+            
+            # Validate URLs
+            for repo in repos:
+                if repo.startswith('https://github.com/'):
+                    valid_repos.append(repo)
+                else:
+                    st.warning(f"⚠️ Invalid GitHub URL skipped: {repo}")
+            
+            if valid_repos:
+                st.success(f"🎯 Found {len(valid_repos)} valid repositories to process")
+                
+                # Progress tracking
+                progress_bar = st.progress(0)
+                status_text = st.empty()
+                results_container = st.container()
+                
+                successful = 0
+                failed = 0
+                
+                with results_container:
+                    st.markdown("### 📊 Processing Results")
+                    
+                    for i, repo_url in enumerate(valid_repos):
+                        repo_name = repo_url.split('/')[-1]
+                        status_text.text(f"🔄 Processing ({i+1}/{len(valid_repos)}): {repo_name}")
+                        
+                        # Create columns for each result
+                        col1, col2, col3 = st.columns([3, 1, 1])
+                        
+                        with col1:
+                            st.write(f"**{repo_name}**")
+                            st.write(f"`{repo_url}`")
+                        
+                        try:
+                            # Make API call
+                            response = requests.post(
+                                "http://localhost:8000/generate",
+                                json={"github_url": repo_url, "use_llm": use_llm},
+                                timeout=120  # 2 minute timeout
+                            )
+                            
+                            if response.status_code == 200:
+                                result = response.json()
+                                with col2:
+                                    st.success("✅ Success")
+                                with col3:
+                                    if st.button("📖 View", key=f"view_{i}"):
+                                        # You can implement view functionality here
+                                        st.session_state.current_repo = repo_name
+                                successful += 1
+                            else:
+                                with col2:
+                                    st.error("❌ Failed")
+                                with col3:
+                                    st.write("")
+                                failed += 1
+                                
+                        except Exception as e:
+                            with col2:
+                                st.error("❌ Error")
+                            with col3:
+                                st.write("")
+                            failed += 1
+                            st.error(f"Error: {str(e)}")
+                        
+                        # Update progress
+                        progress_bar.progress((i + 1) / len(valid_repos))
+                        st.markdown("---")
+                
+                # Final summary
+                status_text.text("🎉 Processing Complete!")
+                st.balloons()
+                
+                st.markdown(f"""
+                <div class="success-box">
+                    <h3>📈 Batch Processing Complete!</h3>
+                    <p><strong>Successful:</strong> {successful} repositories</p>
+                    <p><strong>Failed:</strong> {failed} repositories</p>
+                    <p><strong>Total Processed:</strong> {len(valid_repos)} repositories</p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Quick actions
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.button("📋 View All Documentation", use_container_width=True):
+                        # Implement view all functionality
+                        st.info("View all documentation feature would go here")
+                
+                with col2:
+                    if st.button("🔄 Process More Repos", use_container_width=True):
+                        st.rerun()
+            else:
+                st.error("❌ No valid GitHub URLs found. Please enter URLs starting with 'https://github.com/'")
+
+    # Example templates
+    with st.expander("💡 Quick Templates"):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            if st.button("Popular Python Repos"):
+                st.session_state.multi_repo_text = """https://github.com/django/django
+https://github.com/pallets/flask
+https://github.com/pandas-dev/pandas
+https://github.com/numpy/numpy"""
+                st.rerun()
+        
+        with col2:
+            if st.button("Web Frameworks"):
+                st.session_state.multi_repo_text = """https://github.com/facebook/react
+https://github.com/vuejs/vue
+https://github.com/angular/angular
+https://github.com/sveltejs/svelte"""
+                st.rerun()
+    
+    # Pre-populate if template was selected
+    if 'multi_repo_text' in st.session_state:
+        repo_text = st.session_state.multi_repo_text
 
 # Analytics Page
 elif menu == "📊 Analytics":
@@ -437,7 +593,7 @@ elif menu == "🔄 Recent Projects":
 
 # Settings Page
 elif menu == "⚙️ Settings":
-    st.markdown("## S️ Settings")
+    st.markdown("## ⚙️ Settings")
     
     with st.form("settings_form"):
         st.markdown("### API Configuration")
@@ -463,8 +619,3 @@ st.markdown(
     "</div>", 
     unsafe_allow_html=True
 )
-
-
-
-
-

@@ -1,9 +1,9 @@
 
 # C.O.R.I.A.N - Comprehensive Documentation
-Generated on: 2025-11-03 12:26:55
+Generated on: 2025-11-03 13:19:13
 
 ## 1. Project Overview
-Documentation for C.O.R.I.A.N
+Documentation for ai-assignment-1
 
 ### Analysis Summary
 - **Total Files Analyzed (Mock Data):** 0
@@ -16,29 +16,24 @@ Documentation for C.O.R.I.A.N
 <summary>Click to expand/collapse README</summary>
 
 ```
-For the simple_calc.py you run the jac file then it will ask you to run the python file that has LLM and OpenAi so that it can run 5 random numbers.
-
+No README found
 ```
 </details>
 
 ### 2.2. Recent Commits
 | Hash | Author | Date | Message |
 |---|---|---|---|
-| 348efeb | Collete03 | 2025-10-06 | Create README.md |
-| dfcf8bb | Collete03 | 2025-10-05 | Add simple_calc.jac and maths_helper.py |
-| ade7d2c | Collete03 | 2025-10-05 | Delete guess_game6.jac |
-| fd0eebb | Collete03 | 2025-10-05 | Delete guess_game6.impl.jac |
-| ee5b91b | Collete03 | 2025-10-03 | add all code folder contents |
+| 6666a43 | Wakanda User | 2025-10-05 | Add design file |
+| adf1c8d | Wakanda User | 2025-10-05 | Initial commit - add assignment files |
 
 
 ### 2.3. Most Active Files (Last Year)
 | File | Change Count (Last Year) |
 |---|---|
-| `guess_game6.jac` | 2 |
-| `guess_game6.impl.jac` | 2 |
-| `README.md` | 1 |
-| `maths_helper.py` | 1 |
-| `simple_calc.jac` | 1 |
+| `design/design.txt` | 1 |
+| `calculator.jac` | 1 |
+| `calculator.py` | 1 |
+| `example.py` | 1 |
 | `first.jac` | 1 |
 | `guess_game.py` | 1 |
 | `guess_game1.jac` | 1 |
@@ -47,9 +42,14 @@ For the simple_calc.py you run the jac file then it will ask you to run the pyth
 | `guess_game3.jac` | 1 |
 | `guess_game4.impl.jac` | 1 |
 | `guess_game4.jac` | 1 |
+| `guess_game4.jir` | 1 |
 | `guess_game5.impl.jac` | 1 |
 | `guess_game5.jac` | 1 |
+| `guess_game5.jir` | 1 |
 | `mypyfile.py` | 1 |
+| `python` | 1 |
+| `python_helper.py` | 1 |
+| `simple` | 1 |
 
 
 ### 2.4. Branches

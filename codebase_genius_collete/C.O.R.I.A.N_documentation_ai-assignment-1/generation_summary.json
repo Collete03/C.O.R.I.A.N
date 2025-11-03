@@ -1,0 +1,14 @@
+{
+  "generation_date": "2025-11-03T13:19:14.143528",
+  "status": "Success",
+  "repository_path": "./repos/ai-assignment-1",
+  "output_directory": "C.O.R.I.A.N_documentation_ai-assignment-1",
+  "files_generated": [
+    "C.O.R.I.A.N_documentation_ai-assignment-1/comprehensive_documentation.md",
+    "C.O.R.I.A.N_documentation_ai-assignment-1/comprehensive_documentation.html",
+    "C.O.R.I.A.N_documentation_ai-assignment-1/enhanced_analysis_metadata.json",
+    "C.O.R.I.A.N_documentation_ai-assignment-1/repository_structure.txt",
+    "C.O.R.I.A.N_documentation_ai-assignment-1/README.md",
+    "C.O.R.I.A.N_documentation_ai-assignment-1/git_metadata.json"
+  ]
+}

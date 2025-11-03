@@ -29,7 +29,7 @@ uvicorn server:app --reload
 
 You should see output indicating the server is running on http://127.0.0.1:8000.
 
-(c:\Users\PC\OneDrive\Pictures\Screenshots\Screenshot 2025-step 1.jpg)
+![alt text](<Screenshot 2025-step 1.jpg>)
 
 
 
@@ -48,7 +48,7 @@ streamlit run frontend/app.py
 
 This should automatically open your web browser to http://localhost:8501.
 
-(c:\Users\PC\OneDrive\Pictures\Screenshots\Screenshot 2025-step 2.jpg)
+![alt text](<Screenshot 2025-step 2-1.jpg>)
 
 Generating Documentation
 
@@ -60,10 +60,10 @@ In your browser (at http://localhost:8501), you will see the Codebase Genius hom
 
 Navigate to the "📚 Generate Docs" page using the sidebar.
 
-In the text box, paste the URL of a public GitHub repository. For this demo, you can use the one the app was tested on:
+In the text box, paste the URL of a public GitHub repository. For this demo, you can use any git repo link for example:
 https://github.com/Collete03/C.O.R.I.A.N
 
-(c:\Users\PC\OneDrive\Pictures\Screenshots\Screenshot 2025-step 3.jpg )
+![alt text](<Screenshot 2025-step 3.jpg>)
 
 Step 4: View the Result
 
@@ -72,10 +72,5 @@ Click the "🚀 Generate Documentation" button.
 You will see a progress bar and status updates as the system works. In the background, your FastAPI server is running the Jac agents to clone, analyze, and generate the report.
 
 After a few moments, the application will display the final, fully-generated Markdown documentation directly on the page.
-
-(c:\Users\PC\OneDrive\Pictures\Screenshots\Screenshot 2025-step 4..jpg
-c:\Users\PC\OneDrive\Pictures\Screenshots\Screenshot 2025-step 4.jpg 
-c:\Users\PC\OneDrive\Pictures\Screenshots\Screenshot 2025-step 4b.jpg 
-c:\Users\PC\OneDrive\Pictures\Screenshots\Screenshot 2025-step 4c.jpg 
-c:\Users\PC\OneDrive\Pictures\Screenshots\Screenshot 2025-step 4d.jpg 
-c:\Users\PC\OneDrive\Pictures\Screenshots\Screenshot 2025-step 4e.jpg)
+  ![alt text](<Screenshot 2025-step 4.jpg>) ![alt text](<Screenshot 2025-step 4..jpg>) ![alt text](<Screenshot 2025-step 4b.jpg>) ![alt text](<Screenshot 2025-step 4c.jpg>) ![alt text](<Screenshot 2025-step 4d.jpg>) ![alt text](<Screenshot 2025-step 4e.jpg>)
+![alt text](<Screenshot 2025-step 4i.jpg>) ![alt text](<Screenshot 2025-step 4f.jpg>) ![alt text](<Screenshot 2025-step 4g.jpg>) ![alt text](<Screenshot 2025-step 4h.jpg>)

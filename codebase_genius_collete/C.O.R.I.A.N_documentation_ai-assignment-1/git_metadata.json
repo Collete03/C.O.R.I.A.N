@@ -1,0 +1,42 @@
+{
+  "readme": "No README found",
+  "git_history": "6666a43 (HEAD -> main, origin/main, origin/HEAD) Add design file\nadf1c8d Initial commit - add assignment files\n",
+  "recent_commits": [
+    {
+      "hash": "6666a43",
+      "author": "Wakanda User",
+      "date": "2025-10-05",
+      "message": "Add design file"
+    },
+    {
+      "hash": "adf1c8d",
+      "author": "Wakanda User",
+      "date": "2025-10-05",
+      "message": "Initial commit - add assignment files"
+    }
+  ],
+  "file_statistics": {
+    "design/design.txt": 1,
+    "calculator.jac": 1,
+    "calculator.py": 1,
+    "example.py": 1,
+    "first.jac": 1,
+    "guess_game.py": 1,
+    "guess_game1.jac": 1,
+    "guess_game2.jac": 1,
+    "guess_game3.impl.jac": 1,
+    "guess_game3.jac": 1,
+    "guess_game4.impl.jac": 1,
+    "guess_game4.jac": 1,
+    "guess_game4.jir": 1,
+    "guess_game5.impl.jac": 1,
+    "guess_game5.jac": 1,
+    "guess_game5.jir": 1,
+    "mypyfile.py": 1,
+    "python": 1,
+    "python_helper.py": 1,
+    "simple": 1
+  },
+  "branches": "* main\n  remotes/origin/HEAD -> origin/main\n  remotes/origin/main\n",
+  "tags": []
+}
