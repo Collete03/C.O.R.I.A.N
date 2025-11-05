@@ -43,10 +43,12 @@ Make sure you are in the codebase_genius_collete root directory and your virtual
 
 Run the following command:
 
-streamlit run frontend/app.py
+streamlit run frontend/upgraded_app.py (run this first then after document generation you can run the 2nd on which was our original app before upgrades)
+streamlit run frontend/app.py (for the original app)
 
 
-This should automatically open your web browser to http://localhost:8501.
+
+This should auto9matically open your web browser to http://localhost:8501. (for the first command refer to WALKTHROUGH_upgraded.md to guide you on how to run the upgraded app)
 
 ![alt text](<Screenshot 2025-step 2-1.jpg>)
 
